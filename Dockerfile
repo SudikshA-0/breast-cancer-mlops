@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src ./src
 COPY app ./app
+COPY data ./data
 
 # Train the model at build time so the image is self-contained
 RUN python -m src.train

@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 
 from app.model_service import model_service
-from app.schemas import IrisInput, PredictionResponse
+from app.schemas import BreastCancerInput, PredictionResponse
 
 
 @asynccontextmanager
@@ -17,7 +17,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
-    title="MLOps Iris Prediction API",
+    title="Breast Cancer Diagnosis Prediction API",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -41,7 +41,7 @@ def model_info():
 
 
 @app.post("/predict", response_model=PredictionResponse)
-def predict(payload: IrisInput):
+def predict(payload: BreastCancerInput):
     if not model_service.is_ready:
         raise HTTPException(status_code=503, detail="Model not loaded")
     return model_service.predict(payload)

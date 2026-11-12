@@ -14,7 +14,7 @@ lint:
 	ruff check .
 
 docker-build:
-	docker build -t iris-mlops .
+	docker build -t breast-cancer-mlops .
 
 docker-run:
-	docker run -p 8000:8000 iris-mlops
+	docker run -p 8000:8000 breast-cancer-mlops

@@ -4,7 +4,7 @@ import json
 import joblib
 import pandas as pd
 
-from app.schemas import IrisInput
+from app.schemas import BreastCancerInput
 from src import config
 from src.logger import get_logger
 from src.train import train_model
@@ -29,21 +29,14 @@ class ModelService:
         self.metadata = json.loads(config.METADATA_PATH.read_text())
         logger.info("Model loaded (accuracy=%.4f)", self.metadata["accuracy"])
 
-    def predict(self, payload: IrisInput) -> dict:
+    def predict(self, payload: BreastCancerInput) -> dict:
         features = pd.DataFrame(
-            [[
-                payload.sepal_length,
-                payload.sepal_width,
-                payload.petal_length,
-                payload.petal_width,
-            ]],
-            columns=self.metadata["features"],
+            [payload.model_dump(by_alias=True)], columns=self.metadata["features"]
         )
         proba = self.model.predict_proba(features)[0]
         idx = int(proba.argmax())
         return {
-            "prediction": idx,
-            "flower_name": self.metadata["classes"][idx],
+            "prediction": self.metadata["classes"][idx],
             "confidence": round(float(proba[idx]), 4),
         }
 
